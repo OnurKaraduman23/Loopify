@@ -10,6 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.onurkaraduman.loopify.R
 import com.onurkaraduman.loopify.ui.categories.CategoriesScreen
 import com.onurkaraduman.loopify.ui.home.HomeScreen
+import com.onurkaraduman.loopify.ui.home.HomeViewModel
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
 import com.onurkaraduman.loopify.ui.navigation.Route
@@ -90,8 +93,9 @@ fun LoopifyNavigator() {
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
             composable(route = Route.HomeScreen.route) { backStackEntry ->
-
-                HomeScreen()
+                val homeViewModel: HomeViewModel = hiltViewModel()
+                val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
+                HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = {})
             }
 
             composable(route = Route.SearchScreen.route) {
