@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify.ui.components
+package com.onurkaraduman.loopify.ui.common
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
