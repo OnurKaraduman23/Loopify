@@ -9,7 +9,7 @@ import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
