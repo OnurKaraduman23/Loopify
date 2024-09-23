@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
 import com.onurkaraduman.loopify.ui.components.EmptyScreen
-import com.onurkaraduman.loopify.ui.home.components.HomeScreenPreviewProvider
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
 
