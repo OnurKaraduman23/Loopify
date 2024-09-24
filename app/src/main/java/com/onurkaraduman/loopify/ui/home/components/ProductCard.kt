@@ -16,14 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.onurkaraduman.loopify.R
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
@@ -87,7 +85,6 @@ fun ProductCard(
 
                 Text(
                     text = "$ ${productList.price}",
-                    color = colorResource(id = R.color.green),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -101,7 +98,7 @@ fun ProductCard(
 
 @Preview(showBackground = true)
 @Composable
-fun previewProductCard() {
+fun PreviewProductCard() {
     LoopifyTheme {
         ProductCard(
             productList = ProductsModel(
