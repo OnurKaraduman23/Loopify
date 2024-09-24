@@ -17,8 +17,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             LoopifyTheme {
                 LoopifyNavGraph(Route.HomeScreen.route)
-                }
             }
         }
     }
+}
 

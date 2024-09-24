@@ -1,10 +1,7 @@
 package com.onurkaraduman.loopify.ui.loopify_navigator.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -13,15 +10,15 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.onurkaraduman.loopify.R
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
-
 
 @Composable
 fun LoopifyBottomNavigation(
@@ -30,8 +27,9 @@ fun LoopifyBottomNavigation(
     onItemClick: (Int) -> Unit
 ) {
     NavigationBar(
-        modifier = Modifier.fillMaxWidth(),
-        containerColor = colorResource(id = R.color.gray),
+        modifier = Modifier
+            .fillMaxWidth(),
+        containerColor = colorResource(id = R.color.lightGray),
         tonalElevation = 10.dp
     ) {
         items.forEachIndexed { index, item ->
@@ -39,27 +37,33 @@ fun LoopifyBottomNavigation(
                 selected = index == selectedItem,
                 onClick = { onItemClick(index) },
                 icon = {
-                    Column(horizontalAlignment = CenterHorizontally) {
-                        Icon(
-                            painter = painterResource(id = item.icon),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Text(text = item.text, style = MaterialTheme.typography.labelSmall)
-                    }
+                    Icon(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(26.dp)
+                            .align(CenterVertically)
+                    )
+                },
+                label = {
+                    Text(
+                        text = item.text,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 14.sp), // Yazı boyutunu artır
+                        modifier = Modifier.align(CenterVertically) // Yazıyı dikey olarak ortala
+                    )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = colorResource(id = R.color.black),
                     selectedTextColor = colorResource(id = R.color.black),
-                    unselectedIconColor = colorResource(id = R.color.white),
-                    unselectedTextColor = colorResource(id = R.color.white),
+                    unselectedIconColor = colorResource(id = R.color.gray),
+                    unselectedTextColor = colorResource(id = R.color.gray),
                     indicatorColor = colorResource(id = R.color.white)
                 ),
             )
         }
     }
 }
+
 
 data class BottomNavigationItem(
     @DrawableRes val icon: Int,
