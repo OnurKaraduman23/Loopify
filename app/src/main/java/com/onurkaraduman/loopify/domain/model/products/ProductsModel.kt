@@ -5,7 +5,5 @@ data class ProductsModel(
     val title: String,
     val price: Int,
     val category: String,
-    val tags: List<String>,
-    val rating:Int,
     val image: String
 )

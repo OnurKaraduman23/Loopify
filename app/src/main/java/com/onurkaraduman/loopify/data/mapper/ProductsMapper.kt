@@ -9,10 +9,8 @@ fun ProductsResponse.toProductsModelList(): List<ProductsModel> {
             id = product.id,
             title = product.title,
             price = product.price.toInt(),
-            rating = product.rating.toInt(),
             category = product.category,
             image = product.thumbnail,
-            tags = product.tags
         )
     }
 }

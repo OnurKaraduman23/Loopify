@@ -1,5 +1,6 @@
 package com.onurkaraduman.loopify.data.repository
 
+import com.onurkaraduman.loopify.data.remote.dto.detail.ProductDetailResponse
 import com.onurkaraduman.loopify.data.remote.dto.products.ProductsResponse
 import com.onurkaraduman.loopify.data.service.MyApi
 import com.onurkaraduman.loopify.domain.repository.MyRepository
@@ -11,5 +12,9 @@ class MyRepositoryImpl @Inject constructor(
 
     override suspend fun getAllProducts(): ProductsResponse {
         return myApi.getAllProducts()
+    }
+
+    override suspend fun getProductDetails(id: Int): ProductDetailResponse {
+        return myApi.getProductDetails(id)
     }
 }
