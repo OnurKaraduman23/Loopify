@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify.ui.home
+package com.onurkaraduman.loopify.ui.screens.home
 
 import ProductCard
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,14 +21,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
-import com.onurkaraduman.loopify.ui.common.EmptyScreen
+import com.onurkaraduman.loopify.ui.screens.common.EmptyScreen
+import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
 
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
-    onNavigateDetailScreen: () -> Unit
+    onNavigateDetailScreen: (Int) -> Unit
 ) {
 
     Column(
@@ -41,10 +41,12 @@ fun HomeScreen(
         Text(modifier = Modifier.align(Alignment.Start).padding(start = 8.dp), text = "Recommended For You", fontWeight = FontWeight.Bold, fontSize = 20.sp)
         Spacer(modifier = Modifier.height(8.dp))
         when {
-            homeUiState.isLoading -> CircularProgressIndicator()
-            homeUiState.productList.isNotEmpty() -> ProductList(
-                homeUiState.productList,
-                onClick = { onNavigateDetailScreen() })
+            homeUiState.isLoading -> LoadingScreen()
+            homeUiState.productList.isNotEmpty() -> {
+                ProductList(
+                    homeUiState.productList,
+                    onClick = { onNavigateDetailScreen(it) })
+            }
 
             else -> EmptyScreen(homeUiState.errorMessage.toString())
         }
@@ -55,7 +57,7 @@ fun HomeScreen(
 @Composable
 fun ProductList(
     products: List<ProductsModel>,
-    onClick: () -> Unit
+    onClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -66,8 +68,8 @@ fun ProductList(
     ) {
         items(products) { product ->
             ProductCard(
-                productList = product,
-                onClick = { onClick() }
+                product = product,
+                onClick = { onClick(it) }
             )
         }
     }
@@ -75,12 +77,13 @@ fun ProductList(
 
 @Preview(showBackground = true)
 @Composable
-fun previewHomeScreen(
+fun PreviewHomeScreen(
     @PreviewParameter(HomeScreenPreviewProvider::class) homeUiState: HomeUiState
 ) {
     LoopifyTheme {
         HomeScreen(homeUiState = homeUiState,
-            onNavigateDetailScreen = {})
+            onNavigateDetailScreen = {},
+            )
     }
 }
 

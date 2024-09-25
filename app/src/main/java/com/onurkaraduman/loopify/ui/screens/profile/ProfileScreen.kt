@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify.ui.profile
+package com.onurkaraduman.loopify.ui.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

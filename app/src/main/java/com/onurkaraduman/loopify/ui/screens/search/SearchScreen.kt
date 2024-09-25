@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify.ui.search
+package com.onurkaraduman.loopify.ui.screens.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
