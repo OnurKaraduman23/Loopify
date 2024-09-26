@@ -37,7 +37,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.onurkaraduman.loopify.R
 import com.onurkaraduman.loopify.domain.model.details.ProductDetailsModel
 import com.onurkaraduman.loopify.ui.components.RatingBar
-import com.onurkaraduman.loopify.ui.screens.common.EmptyScreen
+import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiAction
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiEffect
@@ -86,7 +86,7 @@ fun DetailScreen(
         }
 
         else -> {
-            EmptyScreen(message = detailUiState.errorMessage.orEmpty())
+            ErrorScreen(message = detailUiState.errorMessage.orEmpty())
         }
     }
 }
