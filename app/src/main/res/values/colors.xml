@@ -10,4 +10,6 @@
     <color name="gray">#5F5F5F</color>
     <color name="green">#347829</color>
     <color name="lightGray">#E4E4E6</color>
+    <color name="dark_gray">#1E1F1F</color>
+    <color name="placeholder">#A0A3BD</color>
 </resources>
