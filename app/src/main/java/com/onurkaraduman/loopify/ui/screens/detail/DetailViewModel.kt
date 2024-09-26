@@ -1,6 +1,5 @@
 package com.onurkaraduman.loopify.ui.screens.detail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,57 +33,61 @@ class DetailViewModel @Inject constructor(
     init {
         savedStateHandle.get<Int>("id")?.let { id ->
             getProductDetails(id)
-            Log.e("Dante",id.toString())
         }
     }
 
-    fun onAction(detailUiAction: DetailUiAction){
-        when(detailUiAction){
+    fun onAction(detailUiAction: DetailUiAction) {
+        when (detailUiAction) {
             is DetailUiAction.AddToCardClick -> addToCard()
             is DetailUiAction.AddToFavoriteClick -> addToFavorites()
         }
     }
 
 
-   private fun getProductDetails(id: Int) = viewModelScope.launch {
+    private fun getProductDetails(id: Int) = viewModelScope.launch {
         getProductDetailUseCase.invoke(id).collect { result ->
             when (result) {
                 is Resource.Success -> {
-                    _detailUiState.value = _detailUiState.value.copy(
-                        isLoading = false,
-                        productDetails = result.data
-                    )
+                    updateUiState {
+                        copy(
+                            isLoading = false,
+                            productDetails = result.data
+                        )
+                    }
                 }
 
                 is Resource.Loading -> {
-                    _detailUiState.value = _detailUiState.value.copy(
-                        isLoading = true
-                    )
+                    updateUiState { copy(isLoading = true) }
                 }
 
                 is Resource.Error -> {
-                    _detailUiState.value = _detailUiState.value.copy(
-                        isLoading = false,
-                        errorMessage = result.message
-                    )
+                    updateUiState {
+                        copy(
+                            isLoading = false,
+                            errorMessage = result.message
+                        )
+                    }
                 }
             }
-
         }
     }
 
 
-    private fun addToCard()=viewModelScope.launch{
+    private fun addToCard() = viewModelScope.launch {
         emitUiEffect(DetailUiEffect.ShowToastMessage("In Progress (Add To Card Button)"))
     }
 
-    private fun addToFavorites() = viewModelScope.launch{
+    private fun addToFavorites() = viewModelScope.launch {
         emitUiEffect(DetailUiEffect.ShowToastMessage("In Progress (Add Favorite Icon Button)"))
     }
 
 
     private suspend fun emitUiEffect(uiEffect: DetailUiEffect) {
         _uiEffect.send(uiEffect)
+    }
+
+    private fun updateUiState(block: DetailUiState.() -> DetailUiState) {
+        _detailUiState.update(block)
     }
 
 }
