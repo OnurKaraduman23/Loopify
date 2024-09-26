@@ -56,7 +56,7 @@ fun ProductCard(
                     .fillMaxWidth(),
                 text = product.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp, // Daha uyumlu yazı boyutu
+                fontSize = 14.sp,
                 maxLines = 1
             )
 
@@ -70,10 +70,12 @@ fun ProductCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
+                    modifier = Modifier.size(width = 70.dp, height = 20.dp),
                     text = product.category,
                     color = Color.Gray,
-                    fontSize = 12.sp,
-                    maxLines = 1
+                    fontSize = 10.sp,
+                    maxLines = 1,
+
                 )
 
                 Text(
@@ -88,6 +90,7 @@ fun ProductCard(
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
