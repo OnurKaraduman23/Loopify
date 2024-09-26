@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.onurkaraduman.loopify.ui.components.ProductList
-import com.onurkaraduman.loopify.ui.screens.common.EmptySearchScreen
+import com.onurkaraduman.loopify.ui.screens.search.components.EmptySearchScreen
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchContract.SearchUiAction
