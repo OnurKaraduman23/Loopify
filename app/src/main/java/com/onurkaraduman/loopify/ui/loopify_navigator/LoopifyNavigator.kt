@@ -29,6 +29,7 @@ import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigatio
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
 import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
+import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
 
 
 @Composable
@@ -105,8 +106,11 @@ fun LoopifyNavigator() {
             }
 
             composable(route = Route.SearchScreen.route) {
-
-                SearchScreen()
+                val viewModel: SearchViewModel = hiltViewModel()
+                val uiState by viewModel.searchUiState.collectAsStateWithLifecycle()
+                SearchScreen(searchUiState = uiState, onAction = viewModel::onAction, onNavigateDetailScreen = {productId ->
+                    navigateToDetails(navController = navController,productId = productId )
+                })
             }
 
             composable(route = Route.CategoriesScreen.route) {
