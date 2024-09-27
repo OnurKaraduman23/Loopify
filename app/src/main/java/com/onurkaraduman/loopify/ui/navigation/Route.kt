@@ -7,4 +7,5 @@ sealed class Route(
     data object CategoriesScreen: Route(route = "categoriesScreen")
     data object SearchScreen: Route(route = "searchScreen")
     data object DetailScreen: Route(route = "detailScreen/{id}")
+    data object CategoryProductsScreen: Route(route = "categoryProductsScreen/{endPoint}")
 }
