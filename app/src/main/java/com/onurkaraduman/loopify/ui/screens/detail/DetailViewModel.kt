@@ -64,7 +64,7 @@ class DetailViewModel @Inject constructor(
                     updateUiState {
                         copy(
                             isLoading = false,
-                            errorMessage = result.message
+                            errorMessage = result.message ?: "An unknown error Occurred"
                         )
                     }
                 }
