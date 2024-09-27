@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.onurkaraduman.loopify.ui.screens.categories.components.CategoriesList
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
+import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
 @Composable
 fun CategoriesScreen(
@@ -38,4 +41,18 @@ fun CategoriesScreen(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewCategoriesScreen(
+    @PreviewParameter(CategoryPreviewProvider::class) categoriesUiState: CategoriesUiState
+){
+    LoopifyTheme {
+        CategoriesScreen(
+            uiState = categoriesUiState,
+            onNavigateToProductScreen = {}
+        )
+    }
+
 }
