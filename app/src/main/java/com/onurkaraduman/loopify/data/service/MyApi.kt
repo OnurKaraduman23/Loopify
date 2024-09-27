@@ -1,5 +1,7 @@
 package com.onurkaraduman.loopify.data.service
 
+import com.onurkaraduman.loopify.data.remote.dto.categories.CategoriesRepsonseItem
+import com.onurkaraduman.loopify.data.remote.dto.category_product.CategoryProductResponse
 import com.onurkaraduman.loopify.data.remote.dto.detail.ProductDetailResponse
 import com.onurkaraduman.loopify.data.remote.dto.products.ProductsResponse
 import com.onurkaraduman.loopify.data.remote.dto.search.ProductsSearchResponse
@@ -21,5 +23,13 @@ interface MyApi {
     suspend fun searchProduct(
         @Query("q") searchQuery: String
     ): ProductsSearchResponse
+
+    @GET("products/categories")
+    suspend fun getCategories(): List<CategoriesRepsonseItem>
+
+    @GET("products/category/{end_point}")
+    suspend fun getCategoriesProducts(
+        @Path("end_point") endPoint: String
+    ): CategoryProductResponse
 
 }
