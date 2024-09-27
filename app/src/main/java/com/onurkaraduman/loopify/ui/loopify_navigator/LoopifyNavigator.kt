@@ -20,14 +20,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.onurkaraduman.loopify.R
+import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
+import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
+import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.screens.categories.CategoriesScreen
+import com.onurkaraduman.loopify.ui.screens.categories.CategoriesViewModel
+import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsViewModel
+import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsScreen
 import com.onurkaraduman.loopify.ui.screens.detail.DetailScreen
 import com.onurkaraduman.loopify.ui.screens.detail.DetailViewModel
 import com.onurkaraduman.loopify.ui.screens.home.HomeScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeViewModel
-import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
-import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
-import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
 
@@ -100,7 +103,7 @@ fun LoopifyNavigator() {
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val homeViewModel: HomeViewModel = hiltViewModel()
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
-                HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = {productId ->
+                HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
                 })
             }
@@ -108,22 +111,51 @@ fun LoopifyNavigator() {
             composable(route = Route.SearchScreen.route) {
                 val viewModel: SearchViewModel = hiltViewModel()
                 val uiState by viewModel.searchUiState.collectAsStateWithLifecycle()
-                SearchScreen(searchUiState = uiState, onAction = viewModel::onAction, onNavigateDetailScreen = {productId ->
-                    navigateToDetails(navController = navController,productId = productId )
+                SearchScreen(
+                    searchUiState = uiState,
+                    onAction = viewModel::onAction,
+                    onNavigateDetailScreen = { productId ->
+                        navigateToDetails(navController = navController, productId = productId)
+                    })
+            }
+
+            composable(route = Route.CategoriesScreen.route)
+            {
+                val viewmodel: CategoriesViewModel = hiltViewModel()
+                val uiState by viewmodel.categoriesUiState.collectAsStateWithLifecycle()
+                CategoriesScreen(uiState = uiState, onNavigateToProductScreen = { endPoint ->
+                    navigateToCategoryProducts(navController = navController, endPoint = endPoint)
                 })
             }
 
-            composable(route = Route.CategoriesScreen.route) {
-                CategoriesScreen()
-            }
-
-            composable(route = Route.DetailScreen.route,
+            composable(
+                route = Route.DetailScreen.route,
                 arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { backStackEntry ->
                 val viewModel: DetailViewModel = hiltViewModel()
                 val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
                 val uiEffect = viewModel.uiEffect
-                DetailScreen(detailUiState = uiState, onAction = viewModel::onAction,detailUiEffect=uiEffect, onNavigateCardScreen = {})
+                DetailScreen(
+                    detailUiState = uiState,
+                    onAction = viewModel::onAction,
+                    detailUiEffect = uiEffect,
+                    onNavigateCardScreen = {})
+            }
+
+            composable(
+                route = Route.CategoryProductsScreen.route,
+                arguments = listOf(navArgument("endPoint") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val viewModel: CategoryProductsViewModel = hiltViewModel()
+                val uiState by viewModel.categoryProductsUiState.collectAsStateWithLifecycle()
+                CategoryProductsScreen(
+                    categoryProductsUiState = uiState,
+                    onNavigateDetailScreen = { id ->
+                        navigateToDetails(
+                            navController = navController,
+                            productId = id
+                        )
+                    })
             }
 
         }
@@ -145,5 +177,11 @@ private fun navigateToTab(navController: NavController, route: String) {
 private fun navigateToDetails(navController: NavController, productId: Int) {
     navController.navigate(
         route = Route.DetailScreen.route.replace("{id}", productId.toString())
+    )
+}
+
+private fun navigateToCategoryProducts(navController: NavController, endPoint: String) {
+    navController.navigate(
+        route = Route.CategoryProductsScreen.route.replace("{endPoint}", endPoint)
     )
 }
