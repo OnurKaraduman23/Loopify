@@ -7,6 +7,7 @@ import com.onurkaraduman.loopify.domain.use_case.GetAllProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,30 +28,31 @@ class HomeViewModel @Inject constructor(
         getAllProductsUseCase.invoke().collect { result ->
             when (result) {
                 is Resource.Success -> {
-                    _homeUiState.value = _homeUiState.value.copy(
-                        isLoading = false,
-                        productList = result.data.orEmpty()
-                    )
+                    updateUiState { copy(isLoading = false, productList = result.data.orEmpty()) }
                 }
 
                 is Resource.Loading -> {
-                    _homeUiState.value = _homeUiState.value.copy(
-                        isLoading = true
-                    )
-
+                    updateUiState { copy(isLoading = true) }
                 }
 
                 is Resource.Error -> {
-                    _homeUiState.value = _homeUiState.value.copy(
-                        isLoading = false,
-                        errorMessage = result.message ?: "An unknown error Occurred"
-                    )
+                    updateUiState {
+                        copy(
+                            isLoading = false,
+                            errorMessage = result.message ?: "An unknown error Occurred"
+                        )
+                    }
+
                 }
 
             }
 
         }
 
+    }
+
+    private fun updateUiState(block: HomeUiState.() -> HomeUiState) {
+        _homeUiState.update(block)
     }
 
 
