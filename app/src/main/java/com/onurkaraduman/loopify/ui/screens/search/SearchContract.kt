@@ -1,6 +1,7 @@
 package com.onurkaraduman.loopify.ui.screens.search
 
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
 
 object SearchContract {
     data class SearchUiState(
@@ -14,6 +15,7 @@ object SearchContract {
     sealed class SearchUiAction {
         data class ChangeQuery(val searchQuery: String) : SearchUiAction()
         data object SearchProducts: SearchUiAction()
+        data object RetryErrorScreenClick : SearchUiAction()
     }
 
 }
