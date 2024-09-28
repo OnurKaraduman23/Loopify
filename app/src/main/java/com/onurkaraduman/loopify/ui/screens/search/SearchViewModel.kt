@@ -33,6 +33,11 @@ class SearchViewModel @Inject constructor(
                 updateUiState { copy(productList = emptyList()) }
                 searchProducts()
             }
+
+            is SearchUiAction.RetryErrorScreenClick -> {
+                updateUiState { copy(errorMessage = null) }
+                retryFetchingProducts()
+            }
         }
     }
 
@@ -75,6 +80,11 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun retryFetchingProducts() {
+        updateUiState { copy(errorMessage = null) }
+        searchProducts()
     }
 
 

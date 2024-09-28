@@ -25,8 +25,8 @@ import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNa
 import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.screens.categories.CategoriesScreen
 import com.onurkaraduman.loopify.ui.screens.categories.CategoriesViewModel
-import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsViewModel
 import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsScreen
+import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsViewModel
 import com.onurkaraduman.loopify.ui.screens.detail.DetailScreen
 import com.onurkaraduman.loopify.ui.screens.detail.DetailViewModel
 import com.onurkaraduman.loopify.ui.screens.home.HomeScreen
@@ -105,7 +105,7 @@ fun LoopifyNavigator() {
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
                 HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
-                })
+                }, onAction = homeViewModel::onAction)
             }
 
             composable(route = Route.SearchScreen.route) {

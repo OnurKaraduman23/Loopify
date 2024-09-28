@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiState
 
 
 @HiltViewModel
@@ -22,6 +24,13 @@ class HomeViewModel @Inject constructor(
 
     init {
         getAllProducts()
+    }
+
+    fun onAction(uiAction: HomeUiAction){
+        when(uiAction){
+            // başka actionlar ekelenebilir when case'i ondan dolayı duruyor
+            is HomeUiAction.RetryErrorScreenClick -> retryFetchingProducts()
+        }
     }
 
     private fun getAllProducts() = viewModelScope.launch {
@@ -49,6 +58,11 @@ class HomeViewModel @Inject constructor(
 
         }
 
+    }
+
+    fun retryFetchingProducts() {
+        updateUiState { copy(errorMessage = null) }
+        getAllProducts()
     }
 
     private fun updateUiState(block: HomeUiState.() -> HomeUiState) {
