@@ -15,15 +15,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiState
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
 
 
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
+    onAction: (HomeUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit
 ) {
 
@@ -48,7 +52,7 @@ fun HomeScreen(
                     onClick = { onNavigateDetailScreen(it) })
             }
 
-            else -> ErrorScreen(homeUiState.errorMessage.toString())
+            else -> ErrorScreen(homeUiState.errorMessage.toString(), onClick = {onAction(HomeUiAction.RetryErrorScreenClick)})
         }
     }
 
@@ -64,6 +68,7 @@ fun PreviewHomeScreen(
         HomeScreen(
             homeUiState = homeUiState,
             onNavigateDetailScreen = {},
+            onAction = {}
         )
     }
 }

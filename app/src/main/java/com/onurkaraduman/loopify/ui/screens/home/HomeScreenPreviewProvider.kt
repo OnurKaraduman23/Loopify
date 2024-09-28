@@ -2,6 +2,7 @@ package com.onurkaraduman.loopify.ui.screens.home
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
+import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiState
 
 class HomeScreenPreviewProvider: PreviewParameterProvider<HomeUiState> {
     override val values: Sequence<HomeUiState>

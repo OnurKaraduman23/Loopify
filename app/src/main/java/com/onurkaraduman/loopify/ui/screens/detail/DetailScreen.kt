@@ -86,7 +86,7 @@ fun DetailScreen(
         }
 
         else -> {
-            ErrorScreen(message = detailUiState.errorMessage.orEmpty())
+            ErrorScreen(message = detailUiState.errorMessage.orEmpty(), onClick = {})
         }
     }
 }

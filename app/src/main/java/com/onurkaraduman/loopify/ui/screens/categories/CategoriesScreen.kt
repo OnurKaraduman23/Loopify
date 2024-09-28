@@ -37,7 +37,7 @@ fun CategoriesScreen(
             }
 
             uiState.errorMessage != null -> {
-                ErrorScreen(message = uiState.errorMessage)
+                ErrorScreen(message = uiState.errorMessage, onClick = {})
             }
         }
     }

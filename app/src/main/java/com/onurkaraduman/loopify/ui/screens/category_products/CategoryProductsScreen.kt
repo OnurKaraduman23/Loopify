@@ -37,7 +37,7 @@ fun CategoryProductsScreen(
             }
 
             categoryProductsUiState.errorMessage != null -> {
-                ErrorScreen(message = categoryProductsUiState.errorMessage)
+                ErrorScreen(message = categoryProductsUiState.errorMessage, onClick = {})
             }
         }
     }

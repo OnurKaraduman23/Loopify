@@ -55,7 +55,7 @@ fun SearchScreen(
 
 
             searchUiState.errorMessage != null -> {
-                ErrorScreen(searchUiState.errorMessage)
+                ErrorScreen(searchUiState.errorMessage, onClick = {onAction(SearchUiAction.RetryErrorScreenClick)})
             }
 
             searchUiState.searchQuery.isNullOrBlank() -> {
