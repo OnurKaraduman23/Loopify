@@ -1,7 +1,6 @@
 package com.onurkaraduman.loopify.ui.screens.search
 
 import com.onurkaraduman.loopify.domain.model.products.ProductsModel
-import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
 
 object SearchContract {
     data class SearchUiState(
