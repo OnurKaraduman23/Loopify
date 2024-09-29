@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify
+package com.onurkaraduman.loopify.ui.screens.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
