@@ -1,5 +1,6 @@
 package com.onurkaraduman.loopify.ui.screens.detail
 
+import AppToolbar
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,6 +47,8 @@ import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiEffect
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiState
 import com.onurkaraduman.loopify.ui.screens.detail.components.ProductImageSlider
 import com.onurkaraduman.loopify.ui.screens.detail.components.ReviewCard
+import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
+import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -54,11 +59,15 @@ fun DetailScreen(
     detailUiEffect: Flow<DetailUiEffect>,
     onAction: (DetailUiAction) -> Unit,
     onNavigateCardScreen: () -> Unit,
+    mainViewModel: MainViewModel,
+    onBackClickToolbar: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+
     LaunchedEffect(detailUiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            mainViewModel.updateToolbarState(ToolbarState(title = "Detail", showBackButton = true))
             detailUiEffect.collect { effect ->
                 when (effect) {
                     is DetailUiEffect.ShowToastMessage -> {
@@ -73,20 +82,37 @@ fun DetailScreen(
         }
     }
 
-    when {
-        detailUiState.isLoading -> {
-            LoadingScreen()
-        }
-
-        detailUiState.productDetails != null -> {
-            ProductDetailContent(
-                productDetails = detailUiState.productDetails,
-                onAction = onAction
+    Scaffold(
+        topBar = {
+            val toolbarState by mainViewModel.toolbarState.collectAsState()
+            AppToolbar(
+                toolbarState = toolbarState,
+                onBackClick = onBackClickToolbar
             )
         }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.fillMaxSize()
+                .padding(top = paddingValues.calculateTopPadding()),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when {
+                detailUiState.isLoading -> {
+                    LoadingScreen()
+                }
 
-        else -> {
-            ErrorScreen(message = detailUiState.errorMessage.orEmpty(), onClick = {})
+                detailUiState.productDetails != null -> {
+                    ProductDetailContent(
+                        productDetails = detailUiState.productDetails,
+                        onAction = onAction
+                    )
+                }
+
+                else -> {
+                    ErrorScreen(message = detailUiState.errorMessage.orEmpty(), onClick = {})
+                }
+            }
         }
     }
 }
@@ -112,7 +138,7 @@ fun ProductDetailContent(
                     onAction(
                         DetailUiAction.AddToFavoriteClick
                     )
-                } )
+                })
                 Spacer(modifier = Modifier.height(22.dp))
             }
 
@@ -204,7 +230,9 @@ fun PreviewDetailScreen(
             detailUiState = detailUiState,
             detailUiEffect = flow {},
             onAction = {},
-            onNavigateCardScreen = {}
+            onNavigateCardScreen = {},
+            mainViewModel = MainViewModel(),
+            onBackClickToolbar = {}
         )
     }
 }

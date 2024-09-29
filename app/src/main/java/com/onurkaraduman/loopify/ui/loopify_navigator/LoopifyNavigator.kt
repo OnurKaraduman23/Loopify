@@ -31,6 +31,7 @@ import com.onurkaraduman.loopify.ui.screens.detail.DetailScreen
 import com.onurkaraduman.loopify.ui.screens.detail.DetailViewModel
 import com.onurkaraduman.loopify.ui.screens.home.HomeScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeViewModel
+import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
 
@@ -102,30 +103,34 @@ fun LoopifyNavigator() {
         ) {
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val homeViewModel: HomeViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel() //for toolbar
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
                 HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
-                }, onAction = homeViewModel::onAction)
+                }, onAction = homeViewModel::onAction, mainViewModel = mainViewModel)
             }
 
             composable(route = Route.SearchScreen.route) {
                 val viewModel: SearchViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel() //for toolbar
                 val uiState by viewModel.searchUiState.collectAsStateWithLifecycle()
                 SearchScreen(
                     searchUiState = uiState,
                     onAction = viewModel::onAction,
                     onNavigateDetailScreen = { productId ->
                         navigateToDetails(navController = navController, productId = productId)
-                    })
+                    }, mainViewModel = mainViewModel
+                )
             }
 
             composable(route = Route.CategoriesScreen.route)
             {
                 val viewmodel: CategoriesViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel()
                 val uiState by viewmodel.categoriesUiState.collectAsStateWithLifecycle()
                 CategoriesScreen(uiState = uiState, onNavigateToProductScreen = { endPoint ->
                     navigateToCategoryProducts(navController = navController, endPoint = endPoint)
-                })
+                }, mainViewModel = mainViewModel)
             }
 
             composable(
@@ -133,13 +138,16 @@ fun LoopifyNavigator() {
                 arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { backStackEntry ->
                 val viewModel: DetailViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel() // for toolbar
                 val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
                 val uiEffect = viewModel.uiEffect
                 DetailScreen(
                     detailUiState = uiState,
                     onAction = viewModel::onAction,
                     detailUiEffect = uiEffect,
-                    onNavigateCardScreen = {})
+                    onNavigateCardScreen = {},
+                    mainViewModel = mainViewModel,
+                    onBackClickToolbar = { navController.popBackStack() })
             }
 
             composable(
@@ -147,6 +155,7 @@ fun LoopifyNavigator() {
                 arguments = listOf(navArgument("endPoint") { type = NavType.StringType })
             ) { backStackEntry ->
                 val viewModel: CategoryProductsViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel()
                 val uiState by viewModel.categoryProductsUiState.collectAsStateWithLifecycle()
                 CategoryProductsScreen(
                     categoryProductsUiState = uiState,
@@ -155,7 +164,8 @@ fun LoopifyNavigator() {
                             navController = navController,
                             productId = id
                         )
-                    })
+                    }, mainViewModel = mainViewModel,
+                    onBackClickToolbar = { navController.popBackStack() })
             }
 
         }

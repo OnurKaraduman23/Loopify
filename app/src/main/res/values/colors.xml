@@ -12,4 +12,6 @@
     <color name="lightGray">#E4E4E6</color>
     <color name="dark_gray">#1E1F1F</color>
     <color name="placeholder">#A0A3BD</color>
+    <color name="body">#4E4B66</color>
+    <color name="input_background">#fff</color>
 </resources>
