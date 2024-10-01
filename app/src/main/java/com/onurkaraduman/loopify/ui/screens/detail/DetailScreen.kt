@@ -105,7 +105,8 @@ fun DetailScreen(
                 detailUiState.productDetails != null -> {
                     ProductDetailContent(
                         productDetails = detailUiState.productDetails,
-                        onAction = onAction
+                        onAction = onAction,
+                        isFavorite = detailUiState.isFavorite
                     )
                 }
 
@@ -120,7 +121,8 @@ fun DetailScreen(
 @Composable
 fun ProductDetailContent(
     productDetails: ProductDetailsModel,
-    onAction: (DetailUiAction) -> Unit
+    onAction: (DetailUiAction) -> Unit,
+    isFavorite: Boolean
 ) {
     Scaffold(
         bottomBar = {
@@ -136,9 +138,15 @@ fun ProductDetailContent(
             item {
                 ProductDetailView(productDetails = productDetails, onClick = {
                     onAction(
-                        DetailUiAction.AddToFavoriteClick
+                        DetailUiAction.AddToFavoriteClick(
+                            productDetails.id,
+                            productDetails.title,
+                            productDetails.price.toInt(),
+                            productDetails.categories,
+                            productDetails.imageList.first()
+                        )
                     )
-                })
+                }, isFavorite = isFavorite)
                 Spacer(modifier = Modifier.height(22.dp))
             }
 
@@ -166,7 +174,8 @@ fun AddToCartButton(onAction: (DetailUiAction) -> Unit) {
 @Composable
 fun ProductDetailView(
     productDetails: ProductDetailsModel,
-    onClick: (DetailUiAction) -> Unit
+    onClick: (DetailUiAction) -> Unit,
+    isFavorite: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -175,11 +184,21 @@ fun ProductDetailView(
         Box {
             ProductImageSlider(imageUrls = productDetails.imageList)
             IconButton(
-                onClick = { onClick(DetailUiAction.AddToFavoriteClick) },
+                onClick = {
+                    onClick(
+                        DetailUiAction.AddToFavoriteClick(
+                            productDetails.id,
+                            productDetails.title,
+                            productDetails.price.toInt(),
+                            productDetails.categories,
+                            productDetails.imageList.first()
+                        )
+                    )
+                },
                 modifier = Modifier.align(Alignment.TopEnd).padding(16.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_favorite_border),
+                    painter = painterResource(id = if (isFavorite) R.drawable.ic_favorite_fill else R.drawable.ic_favorite_border),
                     contentDescription = "Favorite Icon"
                 )
             }

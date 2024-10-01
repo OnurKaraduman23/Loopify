@@ -4,7 +4,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.onurkaraduman.loopify.data.remote.dto.detail.ReviewDetail
 import com.onurkaraduman.loopify.domain.model.details.ProductDetailsModel
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiState
-class DetailScreenPreviewProvider: PreviewParameterProvider<DetailUiState> {
+
+class DetailScreenPreviewProvider : PreviewParameterProvider<DetailUiState> {
     override val values: Sequence<DetailUiState>
         get() = sequenceOf(
             DetailUiState(
@@ -27,9 +28,10 @@ class DetailScreenPreviewProvider: PreviewParameterProvider<DetailUiState> {
                     price = 245.99,
                     rating = 2.0,
                     stock = 5,
-                    imageList = listOf("image 1","image2","image3"),
+                    categories = "Accessories",
+                    imageList = listOf("image 1", "image2", "image3"),
                     discountPercentage = 7.5,
-                    tagList = listOf("tags1","tags2"),
+                    tagList = listOf("tags1", "tags2"),
                     reviewList = listOf(
                         ReviewDetail(
                             comment = "Awesome",

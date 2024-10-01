@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onurkaraduman.loopify.common.Resource
+import com.onurkaraduman.loopify.data.local.entity.ProductEntity
 import com.onurkaraduman.loopify.domain.use_case.GetProductDetailUseCase
+import com.onurkaraduman.loopify.domain.use_case.local.LocalProductUseCase
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiAction
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiEffect
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiState
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getProductDetailUseCase: GetProductDetailUseCase,
+    private val localProductUseCase: LocalProductUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _detailUiState = MutableStateFlow(DetailUiState())
@@ -34,12 +37,34 @@ class DetailViewModel @Inject constructor(
         savedStateHandle.get<Int>("id")?.let { id ->
             getProductDetails(id)
         }
+
     }
 
     fun onAction(detailUiAction: DetailUiAction) {
         when (detailUiAction) {
             is DetailUiAction.AddToCardClick -> addToCard()
-            is DetailUiAction.AddToFavoriteClick -> addToFavorites()
+            is DetailUiAction.AddToFavoriteClick -> {
+                viewModelScope.launch {
+                    val product = localProductUseCase.selectProduct(detailUiAction.id)
+                    if (product == null) {
+                        val productCurrent = ProductEntity(
+                            detailUiAction.id,
+                            detailUiAction.title,
+                            detailUiAction.price,
+                            detailUiAction.category,
+                            detailUiAction.image
+                        )
+                        upsertProduct(productCurrent)
+                        updateUiState { copy(isFavorite = true) }
+                        emitUiEffect(DetailUiEffect.ShowToastMessage("${detailUiAction.title} Added Favorites"))
+                    } else {
+                        deleteProduct(product)
+                        updateUiState { copy(isFavorite = false) }
+                        emitUiEffect(DetailUiEffect.ShowToastMessage("${detailUiAction.title} Deleted Favorites"))
+                    }
+                }
+
+            }
         }
     }
 
@@ -48,10 +73,12 @@ class DetailViewModel @Inject constructor(
         getProductDetailUseCase.invoke(id).collect { result ->
             when (result) {
                 is Resource.Success -> {
+                    val isFavorite = localProductUseCase.isFavoriteProduct(id)
                     updateUiState {
                         copy(
                             isLoading = false,
-                            productDetails = result.data
+                            productDetails = result.data,
+                            isFavorite = isFavorite
                         )
                     }
                 }
@@ -73,12 +100,12 @@ class DetailViewModel @Inject constructor(
     }
 
 
-    private fun addToCard() = viewModelScope.launch {
-        emitUiEffect(DetailUiEffect.ShowToastMessage("In Progress (Add To Card Button)"))
+    private suspend fun upsertProduct(product: ProductEntity) {
+        localProductUseCase.upsertProduct(product = product)
     }
 
-    private fun addToFavorites() = viewModelScope.launch {
-        emitUiEffect(DetailUiEffect.ShowToastMessage("In Progress (Add Favorite Icon Button)"))
+    private suspend fun deleteProduct(product: ProductEntity) {
+        localProductUseCase.deleteProduct(product)
     }
 
 
@@ -89,5 +116,10 @@ class DetailViewModel @Inject constructor(
     private fun updateUiState(block: DetailUiState.() -> DetailUiState) {
         _detailUiState.update(block)
     }
+
+    private fun addToCard() = viewModelScope.launch {
+        emitUiEffect(DetailUiEffect.ShowToastMessage("In Progress (Add To Cart Icon Button)"))
+    }
+
 
 }

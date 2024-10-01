@@ -6,12 +6,19 @@ object DetailContract {
     data class DetailUiState(
         val isLoading: Boolean = false,
         val productDetails: ProductDetailsModel? = null,
-        val errorMessage: String? = ""
+        val errorMessage: String? = "",
+        val isFavorite: Boolean = false
     )
 
     sealed class DetailUiAction {
         data object AddToCardClick : DetailUiAction()
-        data object AddToFavoriteClick : DetailUiAction() // TODO: Daha sonra class parametresi alan bir class olacak (data class AddFavoriteClick(productDetails: ProductDetailsModel))
+        data class AddToFavoriteClick(
+            val id: Int,
+            val title: String,
+            val price: Int,
+            val category: String,
+            val image: String
+        ) : DetailUiAction()
     }
 
     sealed class DetailUiEffect {
