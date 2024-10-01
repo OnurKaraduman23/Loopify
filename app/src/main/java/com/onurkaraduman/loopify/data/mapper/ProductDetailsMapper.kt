@@ -12,6 +12,7 @@ fun ProductDetailResponse.toProductDetailsModel(): ProductDetailsModel {
         rating = this.rating,
         stock = this.stock,
         imageList = this.images,
+        categories = this.category,
         discountPercentage = this.discountPercentage,
         tagList = this.tags,
         reviewList = this.reviewDetails

@@ -1,5 +1,6 @@
 package com.onurkaraduman.loopify.domain.model.products
 
+
 data class ProductsModel(
     val id: Int,
     val title: String,
