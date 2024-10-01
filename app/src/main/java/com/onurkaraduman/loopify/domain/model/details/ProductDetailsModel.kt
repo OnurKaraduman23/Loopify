@@ -9,6 +9,7 @@ data class ProductDetailsModel(
     val price: Double,
     val rating: Double,
     val stock: Int,
+    val categories: String,
     val imageList: List<String>,
     val discountPercentage: Double,
     val tagList: List<String>,
