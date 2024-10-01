@@ -1,5 +1,7 @@
 package com.onurkaraduman.loopify.data.repository
 
+import com.onurkaraduman.loopify.data.local.dao.ProductDao
+import com.onurkaraduman.loopify.data.local.entity.ProductEntity
 import com.onurkaraduman.loopify.data.remote.dto.categories.CategoriesRepsonseItem
 import com.onurkaraduman.loopify.data.remote.dto.category_product.CategoryProductResponse
 import com.onurkaraduman.loopify.data.remote.dto.detail.ProductDetailResponse
@@ -10,9 +12,11 @@ import com.onurkaraduman.loopify.domain.repository.MyRepository
 import javax.inject.Inject
 
 class MyRepositoryImpl @Inject constructor(
-    private val myApi: MyApi
+    private val myApi: MyApi,
+    private val productDao: ProductDao
 ) : MyRepository {
 
+    // Remote
     override suspend fun getAllProducts(): ProductsResponse {
         return myApi.getAllProducts()
     }
@@ -32,5 +36,28 @@ class MyRepositoryImpl @Inject constructor(
     override suspend fun getCategoriesProducts(endPoint: String): CategoryProductResponse {
         return myApi.getCategoriesProducts(endPoint)
     }
+
+    // Local
+
+    override suspend fun upsertProduct(product: ProductEntity) {
+        productDao.upsert(product)
+    }
+
+    override suspend fun deleteProduct(product: ProductEntity) {
+        productDao.delete(product)
+    }
+
+    override suspend fun selectProducts(): List<ProductEntity> {
+        return productDao.getProducts()
+    }
+
+    override suspend fun selectProduct(id: Int): ProductEntity? {
+        return productDao.getProduct(id)
+    }
+
+    override suspend fun isProductFavorite(id: Int): Boolean {
+        return productDao.isProductFavorite(id)
+    }
+
 
 }
