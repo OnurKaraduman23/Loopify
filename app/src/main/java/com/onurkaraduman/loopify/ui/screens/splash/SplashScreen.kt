@@ -19,10 +19,10 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.onurkaraduman.loopify.R
-import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 import com.onurkaraduman.loopify.ui.screens.splash.SplashContract.SplashUiEffect
-import kotlinx.coroutines.flow.Flow
+import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 @Composable

@@ -1,14 +1,13 @@
 package com.onurkaraduman.loopify.ui.screens.sign_in
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.onurkaraduman.loopify.common.Resource
 import com.onurkaraduman.loopify.data.repository.auth_repository.AuthRepository
-import com.onurkaraduman.loopify.ui.screens.sign_in.SignInContract.SignInUiState
-import com.onurkaraduman.loopify.ui.screens.sign_in.SignInContract.SignInUiEffect
 import com.onurkaraduman.loopify.ui.screens.sign_in.SignInContract.SignInUiAction
-
-
+import com.onurkaraduman.loopify.ui.screens.sign_in.SignInContract.SignInUiEffect
+import com.onurkaraduman.loopify.ui.screens.sign_in.SignInContract.SignInUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
