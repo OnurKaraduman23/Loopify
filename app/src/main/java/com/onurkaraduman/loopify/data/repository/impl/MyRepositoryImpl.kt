@@ -1,4 +1,4 @@
-package com.onurkaraduman.loopify.data.repository
+package com.onurkaraduman.loopify.data.repository.impl
 
 import com.onurkaraduman.loopify.data.local.dao.ProductDao
 import com.onurkaraduman.loopify.data.local.entity.ProductEntity

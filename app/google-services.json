@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "444698954195",
+    "project_id": "loopify-6d1ac",
+    "storage_bucket": "loopify-6d1ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444698954195:android:2869b2005da942a6b38726",
+        "android_client_info": {
+          "package_name": "com.onurkaraduman.loopify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA82v3lTSm4YzMLN078gtGVIT---OZQnQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

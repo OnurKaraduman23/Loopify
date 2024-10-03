@@ -6,7 +6,7 @@ import com.onurkaraduman.loopify.common.Constants.BASE_URL
 import com.onurkaraduman.loopify.common.Constants.PRODUCT_DATABASE_NAME
 import com.onurkaraduman.loopify.data.local.dao.ProductDao
 import com.onurkaraduman.loopify.data.local.database.ProductsDatabase
-import com.onurkaraduman.loopify.data.repository.MyRepositoryImpl
+import com.onurkaraduman.loopify.data.repository.impl.MyRepositoryImpl
 import com.onurkaraduman.loopify.data.service.MyApi
 import com.onurkaraduman.loopify.domain.repository.MyRepository
 import com.onurkaraduman.loopify.domain.use_case.local.DeleteProduct
