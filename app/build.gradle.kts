@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -96,5 +97,12 @@ dependencies {
     // Accompanist and Pager Indicator
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicator)
+
+    // Firebase - Firebase Auth
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
+    // Lottie Animation
+    implementation(libs.lottie.animation)
 
 }

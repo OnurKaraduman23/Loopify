@@ -20,6 +20,11 @@ navigation = "2.8.1"
 pager = "0.28.0"
 pagerIndicator = "0.28.0"
 
+googleServices = "4.4.2"
+firebase = "33.1.2"
+
+lottie_version = "4.0.0"
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,6 +56,10 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 accompanist-pager = {group = "com.google.accompanist", name = "accompanist-pager", version.ref = "pager"}
 accompanist-pager-indicator = {group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "pagerIndicator"}
 
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+
+lottie-animation = {group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie_version"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -58,3 +67,4 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt-plugin = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
