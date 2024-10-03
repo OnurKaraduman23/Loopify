@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.onurkaraduman.loopify.R
+import com.onurkaraduman.loopify.ui.screens.sign_in.SignInScreen
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
 import com.onurkaraduman.loopify.ui.navigation.Route
@@ -37,6 +38,11 @@ import com.onurkaraduman.loopify.ui.screens.home.HomeViewModel
 import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
+import com.onurkaraduman.loopify.ui.screens.sign_in.SignInViewModel
+import com.onurkaraduman.loopify.ui.screens.sign_up.SignUpScreen
+import com.onurkaraduman.loopify.ui.screens.sign_up.SignUpViewModel
+import com.onurkaraduman.loopify.ui.screens.splash.SplashScreen
+import com.onurkaraduman.loopify.ui.screens.splash.SplashViewModel
 
 
 @Composable
@@ -109,9 +115,66 @@ fun LoopifyNavigator() {
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,
-            startDestination = Route.HomeScreen.route,
+            startDestination = Route.SplashScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
+
+            composable(route= Route.SplashScreen.route) {
+                val viewModel: SplashViewModel = hiltViewModel()
+                val uiEffect = viewModel.splashUiEffect
+                SplashScreen(
+                    uiEffect = uiEffect,
+                    onNavigateHomeScreen = {
+                        navController.navigate(route = Route.HomeScreen.route) {
+                            popUpTo(Route.SplashScreen.route) { inclusive = true } // Splash'ten çıkarken geri tuşu ile dönülmesin
+                        }
+                    },
+                    onNavigateSingInScreen = {
+                        navController.navigate(route = Route.SignInScreen.route) {
+                            popUpTo(Route.SplashScreen.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
+
+            composable(route= Route.SignInScreen.route) {
+                val viewModel: SignInViewModel = hiltViewModel()
+                val uiState by viewModel.signInUiState.collectAsStateWithLifecycle()
+                val uiEffect = viewModel.signInUiEffect
+                SignInScreen(
+                    uiState = uiState,
+                    uiEffect = uiEffect,
+                    onAction = viewModel::onAction,
+                    onNavigateHomeScreen = {
+                        navController.navigate(route = Route.HomeScreen.route){
+                            popUpTo(Route.SignInScreen.route) { inclusive = true }
+                        }
+                    },
+                    onNavigateSignUpScreen = {
+                        navController.navigate(route = Route.SignUpScreen.route)
+                    },
+
+                )
+            }
+
+            composable(route = Route.SignUpScreen.route) {
+                val viewModel: SignUpViewModel = hiltViewModel()
+                val uiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
+                val uiEffect = viewModel.signUpUiEffect
+                SignUpScreen(
+                    uiState = uiState,
+                    uiEffect = uiEffect,
+                    onAction = viewModel::onAction,
+                    onNavigateHomeScreen = {
+                        navController.navigate(route = Route.HomeScreen.route) {
+                            popUpTo(Route.SignUpScreen.route) { inclusive = true }
+                            popUpTo(Route.SignInScreen.route) { inclusive = true }
+
+                        }
+                    }
+                )
+            }
+
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val homeViewModel: HomeViewModel = hiltViewModel()
                 val mainViewModel: MainViewModel = hiltViewModel() //for toolbar
