@@ -21,7 +21,8 @@ pager = "0.28.0"
 pagerIndicator = "0.28.0"
 
 googleServices = "4.4.2"
-firebase = "33.1.2"
+firebase = "33.4.0"
+firebase-firestore = "25.1.0"
 
 lottie_version = "4.0.0"
 
@@ -58,8 +59,10 @@ accompanist-pager-indicator = {group = "com.google.accompanist", name = "accompa
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebase-firestore" }
 
 lottie-animation = {group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie_version"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

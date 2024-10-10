@@ -98,9 +98,10 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicator)
 
-    // Firebase - Firebase Auth
+    // Firebase - Firebase Auth - Firestore
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 
     // Lottie Animation
     implementation(libs.lottie.animation)
