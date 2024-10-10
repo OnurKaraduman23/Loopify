@@ -20,13 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
 import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiState
 import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
-import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
 
@@ -35,12 +35,10 @@ fun HomeScreen(
     homeUiState: HomeUiState,
     onAction: (HomeUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-
-        val username = "John Doe" // Burada ismi firebaseden alacağım
-        mainViewModel.updateToolbarState(ToolbarState(title = "Hi, $username"))
+        mainViewModel.fetchUserName()
     }
 
     Scaffold(
@@ -74,7 +72,9 @@ fun HomeScreen(
                         onClick = { onNavigateDetailScreen(it) })
                 }
 
-                else -> ErrorScreen(homeUiState.errorMessage.toString(), onClick = {onAction(HomeUiAction.RetryErrorScreenClick)})
+                else -> ErrorScreen(
+                    homeUiState.errorMessage.toString(),
+                    onClick = { onAction(HomeUiAction.RetryErrorScreenClick) })
             }
         }
 
@@ -93,7 +93,6 @@ fun PreviewHomeScreen(
             homeUiState = homeUiState,
             onNavigateDetailScreen = {},
             onAction = {},
-            mainViewModel = MainViewModel()
         )
     }
 }
