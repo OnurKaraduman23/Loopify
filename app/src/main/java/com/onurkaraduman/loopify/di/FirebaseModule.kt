@@ -1,6 +1,7 @@
 package com.onurkaraduman.loopify.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.onurkaraduman.loopify.data.repository.auth_repository.AuthRepository
 import dagger.Module
 import dagger.Provides
@@ -18,7 +19,13 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseRepository(auth: FirebaseAuth): AuthRepository = AuthRepository(auth)
+    fun provideFirebaseFirestore() = FirebaseFirestore.getInstance()
 
+    @Provides
+    @Singleton
+    fun provideFirebaseRepository(
+        auth: FirebaseAuth,
+        firestore: FirebaseFirestore
+    ): AuthRepository = AuthRepository(auth, firestore)
 
 }
