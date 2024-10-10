@@ -1,5 +1,6 @@
 package com.onurkaraduman.loopify.ui.loopify_navigator
 
+import SignUpScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -21,7 +22,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.onurkaraduman.loopify.R
-import com.onurkaraduman.loopify.ui.screens.sign_in.SignInScreen
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
 import com.onurkaraduman.loopify.ui.navigation.Route
@@ -35,11 +35,10 @@ import com.onurkaraduman.loopify.ui.screens.favorites.FavoriteScreen
 import com.onurkaraduman.loopify.ui.screens.favorites.FavoritesViewModel
 import com.onurkaraduman.loopify.ui.screens.home.HomeScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeViewModel
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
+import com.onurkaraduman.loopify.ui.screens.sign_in.SignInScreen
 import com.onurkaraduman.loopify.ui.screens.sign_in.SignInViewModel
-import com.onurkaraduman.loopify.ui.screens.sign_up.SignUpScreen
 import com.onurkaraduman.loopify.ui.screens.sign_up.SignUpViewModel
 import com.onurkaraduman.loopify.ui.screens.splash.SplashScreen
 import com.onurkaraduman.loopify.ui.screens.splash.SplashViewModel
@@ -119,14 +118,16 @@ fun LoopifyNavigator() {
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
 
-            composable(route= Route.SplashScreen.route) {
+            composable(route = Route.SplashScreen.route) {
                 val viewModel: SplashViewModel = hiltViewModel()
                 val uiEffect = viewModel.splashUiEffect
                 SplashScreen(
                     uiEffect = uiEffect,
                     onNavigateHomeScreen = {
                         navController.navigate(route = Route.HomeScreen.route) {
-                            popUpTo(Route.SplashScreen.route) { inclusive = true } // Splash'ten çıkarken geri tuşu ile dönülmesin
+                            popUpTo(Route.SplashScreen.route) {
+                                inclusive = true
+                            } // Splash'ten çıkarken geri tuşu ile dönülmesin
                         }
                     },
                     onNavigateSingInScreen = {
@@ -137,7 +138,7 @@ fun LoopifyNavigator() {
                 )
             }
 
-            composable(route= Route.SignInScreen.route) {
+            composable(route = Route.SignInScreen.route) {
                 val viewModel: SignInViewModel = hiltViewModel()
                 val uiState by viewModel.signInUiState.collectAsStateWithLifecycle()
                 val uiEffect = viewModel.signInUiEffect
@@ -146,7 +147,7 @@ fun LoopifyNavigator() {
                     uiEffect = uiEffect,
                     onAction = viewModel::onAction,
                     onNavigateHomeScreen = {
-                        navController.navigate(route = Route.HomeScreen.route){
+                        navController.navigate(route = Route.HomeScreen.route) {
                             popUpTo(Route.SignInScreen.route) { inclusive = true }
                         }
                     },
@@ -154,7 +155,7 @@ fun LoopifyNavigator() {
                         navController.navigate(route = Route.SignUpScreen.route)
                     },
 
-                )
+                    )
             }
 
             composable(route = Route.SignUpScreen.route) {
@@ -177,46 +178,42 @@ fun LoopifyNavigator() {
 
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val homeViewModel: HomeViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel() //for toolbar
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
                 HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
-                }, onAction = homeViewModel::onAction, mainViewModel = mainViewModel)
+                }, onAction = homeViewModel::onAction)
             }
 
             composable(route = Route.SearchScreen.route) {
                 val viewModel: SearchViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel() //for toolbar
                 val uiState by viewModel.searchUiState.collectAsStateWithLifecycle()
                 SearchScreen(
                     searchUiState = uiState,
                     onAction = viewModel::onAction,
                     onNavigateDetailScreen = { productId ->
                         navigateToDetails(navController = navController, productId = productId)
-                    }, mainViewModel = mainViewModel
+                    }
                 )
             }
 
             composable(route = Route.CategoriesScreen.route)
             {
                 val viewmodel: CategoriesViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel()
                 val uiState by viewmodel.categoriesUiState.collectAsStateWithLifecycle()
                 CategoriesScreen(uiState = uiState, onNavigateToProductScreen = { endPoint ->
                     navigateToCategoryProducts(navController = navController, endPoint = endPoint)
-                }, mainViewModel = mainViewModel)
+                })
             }
 
             composable(route = Route.FavoritesScreen.route) {
                 val viewModel: FavoritesViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel()
                 val uiState by viewModel.favoritesUiState.collectAsState()
                 FavoriteScreen(
                     favoritesUiState = uiState,
                     onAction = viewModel::onAction,
                     onNavigateDetailScreen = { productId ->
                         navigateToDetails(navController = navController, productId = productId)
-                    }, mainViewModel = mainViewModel,
+                    },
                     onBackClickToolbar = { navController.popBackStack() })
             }
 
@@ -225,7 +222,6 @@ fun LoopifyNavigator() {
                 arguments = listOf(navArgument("id") { type = NavType.IntType })
             ) { backStackEntry ->
                 val viewModel: DetailViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel() // for toolbar
                 val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
                 val uiEffect = viewModel.uiEffect
                 DetailScreen(
@@ -233,7 +229,6 @@ fun LoopifyNavigator() {
                     onAction = viewModel::onAction,
                     detailUiEffect = uiEffect,
                     onNavigateCardScreen = {},
-                    mainViewModel = mainViewModel,
                     onBackClickToolbar = { navController.popBackStack() })
             }
 
@@ -242,7 +237,6 @@ fun LoopifyNavigator() {
                 arguments = listOf(navArgument("endPoint") { type = NavType.StringType })
             ) { backStackEntry ->
                 val viewModel: CategoryProductsViewModel = hiltViewModel()
-                val mainViewModel: MainViewModel = hiltViewModel()
                 val uiState by viewModel.categoryProductsUiState.collectAsStateWithLifecycle()
                 CategoryProductsScreen(
                     categoryProductsUiState = uiState,
@@ -251,7 +245,7 @@ fun LoopifyNavigator() {
                             navController = navController,
                             productId = id
                         )
-                    }, mainViewModel = mainViewModel,
+                    },
                     onBackClickToolbar = { navController.popBackStack() })
             }
 

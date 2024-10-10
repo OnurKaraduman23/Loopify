@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -59,7 +60,7 @@ fun DetailScreen(
     detailUiEffect: Flow<DetailUiEffect>,
     onAction: (DetailUiAction) -> Unit,
     onNavigateCardScreen: () -> Unit,
-    mainViewModel: MainViewModel,
+    mainViewModel: MainViewModel = hiltViewModel(),
     onBackClickToolbar: () -> Unit
 ) {
     val context = LocalContext.current
@@ -250,7 +251,6 @@ fun PreviewDetailScreen(
             detailUiEffect = flow {},
             onAction = {},
             onNavigateCardScreen = {},
-            mainViewModel = MainViewModel(),
             onBackClickToolbar = {}
         )
     }

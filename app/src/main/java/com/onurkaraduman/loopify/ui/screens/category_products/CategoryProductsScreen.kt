@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsContract.CategoryProductsUiState
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
@@ -27,7 +28,7 @@ import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 fun CategoryProductsScreen(
     categoryProductsUiState: CategoryProductsUiState,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel,
+    mainViewModel: MainViewModel = hiltViewModel(),
     onBackClickToolbar: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -80,7 +81,6 @@ fun PreviewCaegoryProductScreen(
         CategoryProductsScreen(
             categoryProductsUiState = categoryProductsUiState,
             onNavigateDetailScreen = {},
-            mainViewModel = MainViewModel(),
             onBackClickToolbar = {}
         )
     }

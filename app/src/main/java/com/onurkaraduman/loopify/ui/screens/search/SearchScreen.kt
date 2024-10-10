@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.screens.search.components.EmptySearchScreen
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
@@ -33,7 +34,7 @@ fun SearchScreen(
     searchUiState: SearchUiState,
     onAction: (SearchUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(Unit) {
@@ -115,7 +116,7 @@ fun PreviewSearchScreen(
             searchUiState = searchUiState,
             onNavigateDetailScreen = {},
             onAction = { },
-            mainViewModel = MainViewModel()
+
         )
     }
 }
