@@ -61,7 +61,8 @@ fun DetailScreen(
     onAction: (DetailUiAction) -> Unit,
     onNavigateCardScreen: () -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
-    onBackClickToolbar: () -> Unit
+    onBackClickToolbar: () -> Unit,
+    onNavigateCart: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -88,7 +89,8 @@ fun DetailScreen(
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
                 toolbarState = toolbarState,
-                onBackClick = onBackClickToolbar
+                onBackClick = onBackClickToolbar,
+                onCartClick = onNavigateCart
             )
         }
     ) { paddingValues ->
@@ -251,7 +253,8 @@ fun PreviewDetailScreen(
             detailUiEffect = flow {},
             onAction = {},
             onNavigateCardScreen = {},
-            onBackClickToolbar = {}
+            onBackClickToolbar = {},
+            onNavigateCart = {}
         )
     }
 }

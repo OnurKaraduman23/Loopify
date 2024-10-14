@@ -19,13 +19,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
-import com.onurkaraduman.loopify.ui.screens.search.components.EmptySearchScreen
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
 import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
 import com.onurkaraduman.loopify.ui.screens.search.SearchContract.SearchUiAction
 import com.onurkaraduman.loopify.ui.screens.search.SearchContract.SearchUiState
+import com.onurkaraduman.loopify.ui.screens.search.components.EmptySearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.components.SearchBar
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 
@@ -34,7 +34,8 @@ fun SearchScreen(
     searchUiState: SearchUiState,
     onAction: (SearchUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = hiltViewModel(),
+    onNavigateCart: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -46,6 +47,7 @@ fun SearchScreen(
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
                 toolbarState = toolbarState,
+                onCartClick = onNavigateCart
             )
         }
     ) { paddingValues ->
@@ -116,6 +118,7 @@ fun PreviewSearchScreen(
             searchUiState = searchUiState,
             onNavigateDetailScreen = {},
             onAction = { },
+            onNavigateCart = {}
 
         )
     }

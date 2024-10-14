@@ -26,7 +26,8 @@ import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 fun CategoriesScreen(
     uiState: CategoriesUiState,
     onNavigateToProductScreen: (String) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = hiltViewModel(),
+    onNavigateCart: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
@@ -38,6 +39,7 @@ fun CategoriesScreen(
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
                 toolbarState = toolbarState,
+                onCartClick = onNavigateCart
             )
         }
     ) { paddingValues ->
@@ -77,6 +79,7 @@ fun PreviewCategoriesScreen(
         CategoriesScreen(
             uiState = categoriesUiState,
             onNavigateToProductScreen = {},
+            onNavigateCart = {}
         )
     }
 

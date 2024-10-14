@@ -29,12 +29,13 @@ fun FavoriteScreen(
     onAction: (FavoritesUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
-    onBackClickToolbar: () -> Unit
+    onBackClickToolbar: () -> Unit,
+    onNavigateCart: () -> Unit
 ) {
 
     LaunchedEffect(Unit) {
         onAction(FavoritesUiAction.RefreshFavorites)
-        mainViewModel.updateToolbarState(ToolbarState(title = "Favorites", showBackButton = true))
+        mainViewModel.updateToolbarState(ToolbarState(title = "Favorites"))
     }
 
     Scaffold(
@@ -42,7 +43,8 @@ fun FavoriteScreen(
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
                 toolbarState = toolbarState,
-                onBackClick = onBackClickToolbar
+                onBackClick = onBackClickToolbar,
+                onCartClick = onNavigateCart
             )
         }
     ) { paddingValues ->

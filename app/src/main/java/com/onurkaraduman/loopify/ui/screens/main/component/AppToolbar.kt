@@ -5,12 +5,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.onurkaraduman.loopify.R
+import com.onurkaraduman.loopify.ui.navigation.Route
 import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +36,9 @@ fun AppToolbar(
                 }
             },
             actions = {
-                IconButton(onClick = onCartClick) {
+                IconButton(onClick = {
+                    onCartClick()
+                }) {
                     Icon(
                         painter = painterResource(R.drawable.ic_cart),
                         contentDescription = "Cart"

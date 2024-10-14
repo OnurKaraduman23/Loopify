@@ -35,7 +35,8 @@ fun HomeScreen(
     homeUiState: HomeUiState,
     onAction: (HomeUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = hiltViewModel(),
+    onNavigateCartScreen: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         mainViewModel.fetchUserName()
@@ -45,7 +46,8 @@ fun HomeScreen(
         topBar = {
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState
+                toolbarState = toolbarState,
+                onCartClick = onNavigateCartScreen
             )
         }
     ) { paddingValues ->
@@ -93,6 +95,7 @@ fun PreviewHomeScreen(
             homeUiState = homeUiState,
             onNavigateDetailScreen = {},
             onAction = {},
+            onNavigateCartScreen = {}
         )
     }
 }

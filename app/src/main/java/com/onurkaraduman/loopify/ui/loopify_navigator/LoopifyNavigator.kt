@@ -25,6 +25,7 @@ import com.onurkaraduman.loopify.R
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.BottomNavigationItem
 import com.onurkaraduman.loopify.ui.loopify_navigator.components.LoopifyBottomNavigation
 import com.onurkaraduman.loopify.ui.navigation.Route
+import com.onurkaraduman.loopify.ui.screens.cart.CartScreen
 import com.onurkaraduman.loopify.ui.screens.categories.CategoriesScreen
 import com.onurkaraduman.loopify.ui.screens.categories.CategoriesViewModel
 import com.onurkaraduman.loopify.ui.screens.category_products.CategoryProductsScreen
@@ -181,7 +182,9 @@ fun LoopifyNavigator() {
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
                 HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
-                }, onAction = homeViewModel::onAction)
+                }, onAction = homeViewModel::onAction, onNavigateCartScreen = {
+                    navigateToCard(navController)
+                })
             }
 
             composable(route = Route.SearchScreen.route) {
@@ -192,6 +195,9 @@ fun LoopifyNavigator() {
                     onAction = viewModel::onAction,
                     onNavigateDetailScreen = { productId ->
                         navigateToDetails(navController = navController, productId = productId)
+                    },
+                    onNavigateCart = {
+                        navigateToCard(navController)
                     }
                 )
             }
@@ -202,6 +208,8 @@ fun LoopifyNavigator() {
                 val uiState by viewmodel.categoriesUiState.collectAsStateWithLifecycle()
                 CategoriesScreen(uiState = uiState, onNavigateToProductScreen = { endPoint ->
                     navigateToCategoryProducts(navController = navController, endPoint = endPoint)
+                }, onNavigateCart = {
+                    navigateToCard(navController)
                 })
             }
 
@@ -214,7 +222,10 @@ fun LoopifyNavigator() {
                     onNavigateDetailScreen = { productId ->
                         navigateToDetails(navController = navController, productId = productId)
                     },
-                    onBackClickToolbar = { navController.popBackStack() })
+                    onBackClickToolbar = { navController.popBackStack() },
+                    onNavigateCart = {
+                        navigateToCard(navController)
+                    })
             }
 
             composable(
@@ -229,7 +240,10 @@ fun LoopifyNavigator() {
                     onAction = viewModel::onAction,
                     detailUiEffect = uiEffect,
                     onNavigateCardScreen = {},
-                    onBackClickToolbar = { navController.popBackStack() })
+                    onBackClickToolbar = { navController.popBackStack() },
+                    onNavigateCart = {
+                        navigateToCard(navController)
+                    })
             }
 
             composable(
@@ -246,7 +260,13 @@ fun LoopifyNavigator() {
                             productId = id
                         )
                     },
-                    onBackClickToolbar = { navController.popBackStack() })
+                    onBackClickToolbar = { navController.popBackStack() }, onNavigateCart = {
+                        navigateToCard(navController)
+                    })
+            }
+
+            composable(route = Route.CartScreen.route) {
+                CartScreen(onBackClickToolbar = { navController.popBackStack() })
             }
 
         }
@@ -274,5 +294,11 @@ private fun navigateToDetails(navController: NavController, productId: Int) {
 private fun navigateToCategoryProducts(navController: NavController, endPoint: String) {
     navController.navigate(
         route = Route.CategoryProductsScreen.route.replace("{endPoint}", endPoint)
+    )
+}
+
+private fun navigateToCard(navController: NavController) {
+    navController.navigate(
+        route = Route.CartScreen.route
     )
 }

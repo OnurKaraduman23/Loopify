@@ -29,7 +29,8 @@ fun CategoryProductsScreen(
     categoryProductsUiState: CategoryProductsUiState,
     onNavigateDetailScreen: (Int) -> Unit,
     mainViewModel: MainViewModel = hiltViewModel(),
-    onBackClickToolbar: () -> Unit
+    onBackClickToolbar: () -> Unit,
+    onNavigateCart: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         mainViewModel.updateToolbarState(ToolbarState(title = "Products", showBackButton = true))
@@ -40,7 +41,8 @@ fun CategoryProductsScreen(
             val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
                 toolbarState,
-                onBackClick = onBackClickToolbar
+                onBackClick = onBackClickToolbar,
+                onCartClick = onNavigateCart
             )
         }
     ) { paddingValues ->
@@ -81,7 +83,8 @@ fun PreviewCaegoryProductScreen(
         CategoryProductsScreen(
             categoryProductsUiState = categoryProductsUiState,
             onNavigateDetailScreen = {},
-            onBackClickToolbar = {}
+            onBackClickToolbar = {},
+            onNavigateCart = {}
         )
     }
 }

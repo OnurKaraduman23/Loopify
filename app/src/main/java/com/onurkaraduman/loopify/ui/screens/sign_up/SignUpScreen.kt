@@ -101,7 +101,12 @@ fun EmailPasswordAndUserNameContent(
         value = userName,
         maxLines = 1,
         placeholder = { Text(text = "Username") },
-        onValueChange = onUserNameChange
+        onValueChange = { input ->
+            val formattedInput = input.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase() else it.toString()
+            }
+            onUserNameChange(formattedInput)
+        }
     )
 
     Spacer(modifier = Modifier.height(32.dp))
