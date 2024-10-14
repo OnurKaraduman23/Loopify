@@ -11,38 +11,58 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.onurkaraduman.loopify.ui.screens.favorites.FavoritesContract.FavoritesUiAction
 import com.onurkaraduman.loopify.ui.screens.favorites.FavoritesContract.FavoritesUiState
 import com.onurkaraduman.loopify.ui.screens.favorites.component.EmptyFavoritesScreen
 import com.onurkaraduman.loopify.ui.screens.favorites.component.FavoriteCard
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
-import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiAction
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiEffect
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.ToolbarState
+import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
 
 @Composable
 fun FavoriteScreen(
     favoritesUiState: FavoritesUiState,
     onAction: (FavoritesUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    onToolbarAction: (MainUiAction) -> Unit,
+    toolbarUiEffect: Flow<MainUiEffect>,
     onBackClickToolbar: () -> Unit,
     onNavigateCart: () -> Unit
 ) {
 
+    val toolbarState = remember { mutableStateOf(ToolbarState()) }
+
+    LaunchedEffect(toolbarUiEffect) {
+        toolbarUiEffect.collect { effect ->
+            when (effect) {
+                is MainUiEffect.SetTitle -> {
+                    toolbarState.value = toolbarState.value.copy(title = "Favorites")
+                }
+
+            }
+        }
+
+    }
+
     LaunchedEffect(Unit) {
+        onToolbarAction(MainUiAction.FetchToolbar)
         onAction(FavoritesUiAction.RefreshFavorites)
-        mainViewModel.updateToolbarState(ToolbarState(title = "Favorites"))
     }
 
     Scaffold(
         topBar = {
-            val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState,
+                toolbarState = toolbarState.value,
                 onBackClick = onBackClickToolbar,
                 onCartClick = onNavigateCart
             )
@@ -87,5 +107,25 @@ fun FavoriteScreen(
                 }
             }
         }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewFavoritesScreen(
+    @PreviewParameter(FavoritesScreenPreviewProvider::class) favoritesUiState: FavoritesUiState
+) {
+    LoopifyTheme {
+        FavoriteScreen(
+            favoritesUiState = favoritesUiState,
+            onAction = {},
+            onNavigateDetailScreen = {},
+            onNavigateCart = {},
+            onToolbarAction = {},
+            onBackClickToolbar = {},
+            toolbarUiEffect = flow { }
+
+        )
     }
 }
