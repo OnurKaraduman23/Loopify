@@ -23,8 +23,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
@@ -48,8 +47,9 @@ import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiEffect
 import com.onurkaraduman.loopify.ui.screens.detail.DetailContract.DetailUiState
 import com.onurkaraduman.loopify.ui.screens.detail.components.ProductImageSlider
 import com.onurkaraduman.loopify.ui.screens.detail.components.ReviewCard
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
-import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiAction
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiEffect
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.ToolbarState
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -60,16 +60,34 @@ fun DetailScreen(
     detailUiEffect: Flow<DetailUiEffect>,
     onAction: (DetailUiAction) -> Unit,
     onNavigateCardScreen: () -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    onToolbarAction: (MainUiAction) -> Unit,
+    toolbarUiEffect: Flow<MainUiEffect>,
     onBackClickToolbar: () -> Unit,
     onNavigateCart: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    val toolbarState = remember { mutableStateOf(ToolbarState()) }
+
+    LaunchedEffect(toolbarUiEffect) {
+        toolbarUiEffect.collect { effect ->
+            when (effect) {
+                is MainUiEffect.SetTitle -> {
+                    toolbarState.value = toolbarState.value.copy(title = "Detail", showBackButton = true)
+                }
+
+            }
+        }
+
+    }
+    LaunchedEffect(Unit){
+        onToolbarAction(MainUiAction.FetchToolbar)
+    }
+
+
     LaunchedEffect(detailUiEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            mainViewModel.updateToolbarState(ToolbarState(title = "Detail", showBackButton = true))
             detailUiEffect.collect { effect ->
                 when (effect) {
                     is DetailUiEffect.ShowToastMessage -> {
@@ -86,9 +104,8 @@ fun DetailScreen(
 
     Scaffold(
         topBar = {
-            val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState,
+                toolbarState = toolbarState.value,
                 onBackClick = onBackClickToolbar,
                 onCartClick = onNavigateCart
             )
@@ -254,7 +271,9 @@ fun PreviewDetailScreen(
             onAction = {},
             onNavigateCardScreen = {},
             onBackClickToolbar = {},
-            onNavigateCart = {}
+            onNavigateCart = {},
+            onToolbarAction = {},
+            toolbarUiEffect = flow {  }
         )
     }
 }

@@ -10,43 +10,59 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
-import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiAction
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiEffect
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.ToolbarState
 import com.onurkaraduman.loopify.ui.screens.search.SearchContract.SearchUiAction
 import com.onurkaraduman.loopify.ui.screens.search.SearchContract.SearchUiState
 import com.onurkaraduman.loopify.ui.screens.search.components.EmptySearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.components.SearchBar
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun SearchScreen(
     searchUiState: SearchUiState,
     onAction: (SearchUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    onToolbarAction: (MainUiAction) -> Unit,
+    toolbarUiEffect: Flow<MainUiEffect>,
     onNavigateCart: () -> Unit
 ) {
 
+    val toolbarState = remember { mutableStateOf(ToolbarState()) }
+
+    LaunchedEffect(toolbarUiEffect) {
+        toolbarUiEffect.collect { effect ->
+            when (effect) {
+                is MainUiEffect.SetTitle -> {
+                    toolbarState.value = toolbarState.value.copy(title = "Search")
+                }
+
+            }
+        }
+
+    }
+
     LaunchedEffect(Unit) {
-        mainViewModel.updateToolbarState(ToolbarState(title = "Search"))
+        onToolbarAction(MainUiAction.FetchToolbar)
     }
 
     Scaffold(
         topBar = {
-            val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState,
+                toolbarState = toolbarState.value,
                 onCartClick = onNavigateCart
             )
         }
@@ -118,7 +134,9 @@ fun PreviewSearchScreen(
             searchUiState = searchUiState,
             onNavigateDetailScreen = {},
             onAction = { },
-            onNavigateCart = {}
+            onNavigateCart = {},
+            onToolbarAction = {},
+            toolbarUiEffect = flow { }
 
         )
     }

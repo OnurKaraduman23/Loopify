@@ -8,37 +8,52 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.screens.categories.components.CategoriesList
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
-import com.onurkaraduman.loopify.ui.screens.main.ToolbarState
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiAction
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiEffect
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.ToolbarState
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 @Composable
 fun CategoriesScreen(
     uiState: CategoriesUiState,
     onNavigateToProductScreen: (String) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    onToolbarAction: (MainUiAction) -> Unit,
+    toolbarUiEffect: Flow<MainUiEffect>,
     onNavigateCart: () -> Unit
 ) {
+    val toolbarState = remember { mutableStateOf(ToolbarState()) }
+
+    LaunchedEffect(toolbarUiEffect) {
+        toolbarUiEffect.collect { effect ->
+            when (effect) {
+                is MainUiEffect.SetTitle -> {
+                    toolbarState.value = toolbarState.value.copy(title = "Category")
+                }
+
+            }
+        }
+
+    }
 
     LaunchedEffect(Unit) {
-        mainViewModel.updateToolbarState(ToolbarState(title = "Categories"))
+        onToolbarAction(MainUiAction.FetchToolbar)
     }
 
     Scaffold(
         topBar = {
-            val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState,
+                toolbarState = toolbarState.value,
                 onCartClick = onNavigateCart
             )
         }
@@ -79,7 +94,9 @@ fun PreviewCategoriesScreen(
         CategoriesScreen(
             uiState = categoriesUiState,
             onNavigateToProductScreen = {},
-            onNavigateCart = {}
+            onNavigateCart = {},
+            onToolbarAction = {},
+            toolbarUiEffect = flow { }
         )
     }
 

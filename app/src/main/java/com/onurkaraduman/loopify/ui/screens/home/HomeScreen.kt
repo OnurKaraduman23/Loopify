@@ -11,8 +11,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -20,14 +20,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.onurkaraduman.loopify.ui.components.ProductList
 import com.onurkaraduman.loopify.ui.screens.common.ErrorScreen
 import com.onurkaraduman.loopify.ui.screens.common.LoadingScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiAction
 import com.onurkaraduman.loopify.ui.screens.home.HomeContract.HomeUiState
-import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiAction
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.MainUiEffect
+import com.onurkaraduman.loopify.ui.screens.main.MainContract.ToolbarState
 import com.onurkaraduman.loopify.ui.theme.LoopifyTheme
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 @Composable
@@ -35,18 +38,32 @@ fun HomeScreen(
     homeUiState: HomeUiState,
     onAction: (HomeUiAction) -> Unit,
     onNavigateDetailScreen: (Int) -> Unit,
-    mainViewModel: MainViewModel = hiltViewModel(),
+    onToolbarAction: (MainUiAction) -> Unit,
+    toolbarUiEffect: Flow<MainUiEffect>,
     onNavigateCartScreen: () -> Unit
 ) {
+    val toolbarState = remember { mutableStateOf(ToolbarState()) }
+
+    LaunchedEffect(toolbarUiEffect) {
+        toolbarUiEffect.collect { effect ->
+            when (effect) {
+                is MainUiEffect.SetTitle -> {
+                    toolbarState.value = toolbarState.value.copy(title = effect.userName)
+                }
+
+            }
+        }
+
+    }
+
     LaunchedEffect(Unit) {
-        mainViewModel.fetchUserName()
+        onToolbarAction(MainUiAction.FetchToolbar)
     }
 
     Scaffold(
         topBar = {
-            val toolbarState by mainViewModel.toolbarState.collectAsState()
             AppToolbar(
-                toolbarState = toolbarState,
+                toolbarState = toolbarState.value,
                 onCartClick = onNavigateCartScreen
             )
         }
@@ -95,7 +112,9 @@ fun PreviewHomeScreen(
             homeUiState = homeUiState,
             onNavigateDetailScreen = {},
             onAction = {},
-            onNavigateCartScreen = {}
+            onNavigateCartScreen = {},
+            onToolbarAction = {},
+            toolbarUiEffect = flow {}
         )
     }
 }

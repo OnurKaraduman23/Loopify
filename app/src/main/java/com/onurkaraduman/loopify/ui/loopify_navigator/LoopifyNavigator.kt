@@ -36,6 +36,7 @@ import com.onurkaraduman.loopify.ui.screens.favorites.FavoriteScreen
 import com.onurkaraduman.loopify.ui.screens.favorites.FavoritesViewModel
 import com.onurkaraduman.loopify.ui.screens.home.HomeScreen
 import com.onurkaraduman.loopify.ui.screens.home.HomeViewModel
+import com.onurkaraduman.loopify.ui.screens.main.MainViewModel
 import com.onurkaraduman.loopify.ui.screens.search.SearchScreen
 import com.onurkaraduman.loopify.ui.screens.search.SearchViewModel
 import com.onurkaraduman.loopify.ui.screens.sign_in.SignInScreen
@@ -179,17 +180,21 @@ fun LoopifyNavigator() {
 
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val homeViewModel: HomeViewModel = hiltViewModel()
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 val homeUiState by homeViewModel.homeUiState.collectAsStateWithLifecycle()
                 HomeScreen(homeUiState = homeUiState, onNavigateDetailScreen = { productId ->
                     navigateToDetails(navController = navController, productId = productId)
                 }, onAction = homeViewModel::onAction, onNavigateCartScreen = {
                     navigateToCard(navController)
-                })
+                }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
             composable(route = Route.SearchScreen.route) {
                 val viewModel: SearchViewModel = hiltViewModel()
                 val uiState by viewModel.searchUiState.collectAsStateWithLifecycle()
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 SearchScreen(
                     searchUiState = uiState,
                     onAction = viewModel::onAction,
@@ -198,7 +203,7 @@ fun LoopifyNavigator() {
                     },
                     onNavigateCart = {
                         navigateToCard(navController)
-                    }
+                    }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect
                 )
             }
 
@@ -206,16 +211,20 @@ fun LoopifyNavigator() {
             {
                 val viewmodel: CategoriesViewModel = hiltViewModel()
                 val uiState by viewmodel.categoriesUiState.collectAsStateWithLifecycle()
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 CategoriesScreen(uiState = uiState, onNavigateToProductScreen = { endPoint ->
                     navigateToCategoryProducts(navController = navController, endPoint = endPoint)
                 }, onNavigateCart = {
                     navigateToCard(navController)
-                })
+                }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
             composable(route = Route.FavoritesScreen.route) {
                 val viewModel: FavoritesViewModel = hiltViewModel()
                 val uiState by viewModel.favoritesUiState.collectAsState()
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 FavoriteScreen(
                     favoritesUiState = uiState,
                     onAction = viewModel::onAction,
@@ -225,7 +234,7 @@ fun LoopifyNavigator() {
                     onBackClickToolbar = { navController.popBackStack() },
                     onNavigateCart = {
                         navigateToCard(navController)
-                    })
+                    }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
             composable(
@@ -235,6 +244,8 @@ fun LoopifyNavigator() {
                 val viewModel: DetailViewModel = hiltViewModel()
                 val uiState by viewModel.detailUiState.collectAsStateWithLifecycle()
                 val uiEffect = viewModel.uiEffect
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 DetailScreen(
                     detailUiState = uiState,
                     onAction = viewModel::onAction,
@@ -243,7 +254,7 @@ fun LoopifyNavigator() {
                     onBackClickToolbar = { navController.popBackStack() },
                     onNavigateCart = {
                         navigateToCard(navController)
-                    })
+                    }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
             composable(
@@ -252,6 +263,8 @@ fun LoopifyNavigator() {
             ) { backStackEntry ->
                 val viewModel: CategoryProductsViewModel = hiltViewModel()
                 val uiState by viewModel.categoryProductsUiState.collectAsStateWithLifecycle()
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
                 CategoryProductsScreen(
                     categoryProductsUiState = uiState,
                     onNavigateDetailScreen = { id ->
@@ -262,11 +275,14 @@ fun LoopifyNavigator() {
                     },
                     onBackClickToolbar = { navController.popBackStack() }, onNavigateCart = {
                         navigateToCard(navController)
-                    })
+                    }, onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
             composable(route = Route.CartScreen.route) {
-                CartScreen(onBackClickToolbar = { navController.popBackStack() })
+                val mainViewModel: MainViewModel = hiltViewModel()
+                val mainUiEffect = mainViewModel.toolbarUiEffect
+                CartScreen(onBackClickToolbar = { navController.popBackStack() },
+                    onToolbarAction = mainViewModel::onAction, toolbarUiEffect = mainUiEffect)
             }
 
         }
