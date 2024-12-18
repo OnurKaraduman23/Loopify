@@ -1,3 +1,14 @@
+## Screenshots
+| Onboarding                                                                                             | Sign In                                                                                          | Sign Up                                                                                         | Home                                                                                           |
+|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| <img src="https://github.com/user-attachments/assets/f1e6f907-00e1-4ffd-9344-0ceebd128d3d" alt="Onboarding" width="200px"/>   | <img src="https://github.com/user-attachments/assets/c1b48c27-442a-4810-ab3c-088e18025bb3" width="200px"/> | <img src="https://github.com/user-attachments/assets/8309c61a-38a5-47d2-bca9-d9eaa3a0ed46" width="200px"/> | <img src="https://github.com/user-attachments/assets/3675baaa-b511-489e-8523-da987b4a6e60" alt="Home" width="200px"/>   |
+
+| Detail                                                                                               | Search                                                                                            | Category                                                                                         | Favorites                                                                                        |
+|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| <img src="https://github.com/user-attachments/assets/807c9ee3-36e1-4abd-8fbe-6e916665944c" alt="Detail" width="200px"/>      | <img src="https://github.com/user-attachments/assets/d36ce546-751c-4ce5-b6b5-0505d373ffa6" alt="Search" width="200px"/>  | <img src="https://github.com/user-attachments/assets/46a43d5c-7df0-4b93-a436-69bac95ca1de" alt="Category" width="200px"/> | <img src="https://github.com/user-attachments/assets/70a2dac8-e34f-4ffc-8ce6-e5c152c5baba" alt="Favorites" width="200px"/> |
+
+
+
 <p align="center">
   <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExb21jc3NtZDhrajNtcjJ4bHZucDNpMXZhOHhicGZvM2dueml4aHlpMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XzqEFZ06NSFgXaut2g/giphy.gif" alt="Cargando Loading GIF">
-</p>
+
